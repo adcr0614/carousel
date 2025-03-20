@@ -1,0 +1,301 @@
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	margin: 0;
+}
+
+main {
+	position: relative;
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.carousel {
+	display: flex;
+	position: relative;
+	width: 100%;
+	transition: none;
+}
+
+/* 方向別クラス */
+.carousel.horizontal {
+	flex-direction: row;
+	touch-action: pan-y; /* 水平スワイプ時は縦スクロールを許可 */
+}
+
+.carousel.vertical {
+	flex-direction: column;
+	touch-action: pan-x; /* 垂直スワイプ時は横スクロールを許可 */
+}
+
+/* ドラッグ可能時のスタイル */
+.carousel.draggable {
+	user-select: none;
+}
+
+.carousel-item {
+	flex: 0 0 auto;
+	width: 60%;
+	height: 400px;
+	/* width: calc(60% + (var(--progress, 0) * 20%)); */
+
+	position: relative;
+	/* transform: scale(calc(0.8 + (0.2 * var(--progress, 0)))); */
+	opacity: 0.5;
+	transition: opacity 0.3s;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+/* .carousel-item:nth-child(1) {
+	width: 30%;
+}
+
+.carousel-item:nth-child(2) {
+	width: 70%;
+}
+
+.carousel-item:nth-child(3) {
+	width: 30%;
+}
+
+.carousel-item:nth-child(4) {
+	width: 50%;
+} */
+
+/* アクティブなスライドは完全に不透明 */
+.carousel-slide-active {
+	z-index: 2;
+	opacity: 1;
+	/* width: 600px; */
+}
+
+.carousel-item img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transform: scale(calc(1 + (0.2 * var(--progress, 0))));
+}
+
+/* 垂直カルーセル用のスタイル */
+.carousel.vertical .carousel-item {
+	min-height: 100%;
+	min-width: auto;
+}
+
+.carousel.vertical .carousel-item img {
+	width: auto;
+	height: 100%;
+}
+
+/* ナビゲーションボタン */
+.carousel-button {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	border: none;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	font-size: 18px;
+	cursor: pointer;
+	z-index: 10;
+	transition: background-color 0.3s;
+}
+
+.carousel-button:hover {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-button.prev {
+	left: 10px;
+}
+
+.carousel-button.next {
+	right: 10px;
+}
+
+/* 垂直カルーセル用のナビゲーションボタン */
+.carousel.vertical + .carousel-button.prev {
+	top: 10px;
+	left: 50%;
+	transform: translateX(-50%) rotate(90deg);
+}
+
+.carousel.vertical + .carousel-button.next {
+	bottom: 10px;
+	top: auto;
+	left: 50%;
+	transform: translateX(-50%) rotate(90deg);
+}
+
+/* ページネーション */
+.carousel-indicators {
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 10px;
+	z-index: 10;
+}
+
+.indicator {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.5);
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.indicator.active {
+	background-color: white;
+}
+
+/* 垂直カルーセル用のページネーション */
+.carousel.vertical + .carousel-indicators {
+	bottom: 50%;
+	left: auto;
+	right: 10px;
+	transform: translateY(50%);
+	flex-direction: column;
+}
+
+.carousel-slide-prev,
+.carousel-slide-next {
+	z-index: 1;
+}
+
+/* ナビゲーションボタン */
+.carousel-button {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 48px;
+	height: 48px;
+	border: none;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.85);
+	color: #333;
+	font-size: 18px;
+	cursor: pointer;
+	transition: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	backdrop-filter: blur(2px);
+	-webkit-backdrop-filter: blur(2px);
+	outline: none;
+}
+
+.carousel-button:hover {
+	background: rgba(255, 255, 255, 0.95);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	transform: translateY(-50%) scale(1.05);
+}
+
+.carousel-button:active {
+	background: white;
+	transform: translateY(-50%) scale(0.98);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-button.prev {
+	left: 16px;
+}
+
+.carousel-button.next {
+	right: 16px;
+}
+
+.carousel-button::before {
+	content: "";
+	width: 10px;
+	height: 10px;
+	border-top: 2.5px solid #333;
+	border-right: 2.5px solid #333;
+	display: block;
+	transition: border-color 0.25s ease;
+}
+
+.carousel-button:hover::before {
+	border-color: #000;
+}
+
+.carousel-button.prev::before {
+	transform: rotate(-135deg);
+	margin-left: 4px;
+}
+
+.carousel-button.next::before {
+	transform: rotate(45deg);
+	margin-right: 4px;
+}
+
+@media (max-width: 768px) {
+	.carousel-button {
+		width: 40px;
+		height: 40px;
+	}
+
+	.carousel-button.prev {
+		left: 12px;
+	}
+
+	.carousel-button.next {
+		right: 12px;
+	}
+
+	.carousel-button::before {
+		width: 8px;
+		height: 8px;
+		border-width: 2px;
+	}
+}
+
+/* .progress-display {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white;
+	padding: 3px 8px;
+	border-radius: 10px;
+	font-size: 12px;
+	z-index: 5;
+}
+
+.progress-bar {
+	position: absolute;
+	right: 0;
+	bottom: 10px;
+	left: 0;
+	margin: 0 auto;
+	width: 80%;
+	height: 4px;
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: 2px;
+	overflow: hidden;
+	z-index: 5;
+}
+
+.progress-bar::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: calc(var(--progress, 0) * 100%);
+	height: 100%;
+	background-color: white;
+} */
