@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拡張カルーセル</title>
+    <link rel="stylesheet" href="carousel.css">
+</head>
+
+<body>
+    <main>
+        <div class="carousel" id="myCarousel">
+            <div class="carousel-item">
+                <img src="https://picsum.photos/600/400?random=1" alt="スライド1">
+                <div class="progress-bar"></div>
+                <div class="progress-display">進捗率: <span class="progress-value">0</span></div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/600/400?random=2" alt="スライド2">
+                <div class="progress-bar"></div>
+                <div class="progress-display">進捗率: <span class="progress-value">0</span></div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/600/400?random=3" alt="スライド3">
+                <div class="progress-bar"></div>
+                <div class="progress-display">進捗率: <span class="progress-value">0</span></div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://picsum.photos/600/400?random=4" alt="スライド4">
+                <div class="progress-bar"></div>
+                <div class="progress-display">進捗率: <span class="progress-value">0</span></div>
+            </div>
+        </div>
+
+        <button class="carousel-button prev" id="prevBtn"></button>
+        <button class="carousel-button next" id="nextBtn"></button>
+
+        <div class="carousel-indicators" id="indicators"></div>
+    </main>
+
+    <script src="carousel.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            /**************************************
+             * カルーセル初期化
+             **************************************/
+            const carousel = new Carousel('myCarousel', {
+                direction: 'horizontal', // "horizontal", "vertical"
+                duration: 0.64,
+                easing: 'cubic-bezier(0.22, 0.61, 0.26, 0.97)',
+                gap: 10,
+                navigation: {
+                    enabled: true,
+                    prevEl: '#prevBtn',
+                    nextEl: '#nextBtn'
+                },
+                pagination: {
+                    enabled: true,
+                    el: '#indicators',
+                    clickable: true
+                },
+                autoplay: true,
+                loop: {
+                    enabled: true,
+                    interval: 3000
+                },
+                seamless: true,
+                draggable: true,
+                align: 'center',
+                alignMode: 'all' // "edge", "all"
+            });
+
+            // /**************************************
+            //  * 進捗率表示の更新処理
+            //  **************************************/
+            // function updateProgressDisplay() {
+            //     const items = document.querySelectorAll('.carousel-item');
+            //     items.forEach(item => {
+            //         const progress = getComputedStyle(item).getPropertyValue('--progress');
+            //         const progressValue = parseFloat(progress || 0).toFixed(3);
+            //         const progressDisplay = item.querySelector('.progress-value');
+            //         if (progressDisplay) {
+            //             progressDisplay.textContent = progressValue;
+            //         }
+            //     });
+
+            //     // 定期的に更新
+            //     requestAnimationFrame(updateProgressDisplay);
+            // }
+
+            // // 進捗率表示の更新を開始
+            // updateProgressDisplay();
+
+            /**************************************
+             * 1. 基本イベント
+             **************************************/
+            // カルーセル初期化完了時
+            carousel.on('init', (data) => {
+                // console.log('カルーセル初期化完了');
+            });
+
+            // スライド変更前
+            carousel.on('beforeSlideChange', (data) => {
+                // console.log(`スライド変更: ${data.previousIndex} → ${data.currentIndex}`);
+            });
+
+            // スライド変更後
+            carousel.on('afterSlideChange', (data) => {
+                // data.currentIndex: 新しいスライドインデックス
+            });
+
+            /**************************************
+             * 2. ナビゲーション関連イベント
+             **************************************/
+            /*
+            // ナビゲーションボタン操作前
+            carousel.on('beforeNavigation', (data) => {
+                // data.direction: "prev" または "next"
+                // data.currentIndex: 現在のスライドインデックス
+            });
+
+            // ナビゲーションボタン操作後
+            carousel.on('afterNavigation', (data) => {
+                // data.direction: "prev" または "next"
+                // data.currentIndex: 新しいスライドインデックス
+            });
+            */
+
+            /**************************************
+             * 3. ドラッグ操作関連イベント
+             **************************************/
+
+            // ドラッグ開始時
+            // carousel.on('dragStart', (data) => {
+            //     // data.startPosition: ドラッグ開始位置
+            //     // data.currentIndex: 現在のスライドインデックス
+            // });
+
+            // ドラッグ中
+            // carousel.on('dragMove', (data) => {
+            //     // data.distance: ドラッグ距離
+            //     // data.translate: 現在の変換値
+            //     // data.progressValues: 各スライドの進捗率
+            // });
+
+            // ドラッグ終了時
+            // carousel.on('dragEnd', (data) => {
+            //     // data.distance: 総ドラッグ距離
+            //     // data.duration: ドラッグにかかった時間
+            //     // data.targetIndex: 移動先のスライドインデックス
+            //     // data.currentIndex: 現在のスライドインデックス
+            // });
+
+
+            /**************************************
+             * 4. 自動再生関連イベント
+             **************************************/
+            /*
+            // 自動再生開始時
+            carousel.on('autoplayStart', (data) => {
+                console.log('自動再生開始');
+            });
+
+            // 自動再生停止時
+            carousel.on('autoplayStop', (data) => {
+                console.log('自動再生停止');
+            });
+            */
+
+            /**************************************
+             * 5. アニメーション関連イベント
+             **************************************/
+            // アニメーション開始時
+            carousel.on('animationStart', (data) => {
+                // data.startPosition: アニメーション開始位置
+                // data.targetPosition: アニメーション終了位置
+                // data.duration: アニメーション時間（秒）
+            });
+
+            // 進捗率変更時
+            carousel.on('progressChange', (data) => {
+                // data.progress: アニメーション進捗率（0～1）
+                // data.progressValues: 各スライドの進捗率配列
+            });
+
+            // アニメーション完了時
+            carousel.on('animationEnd', (data) => {
+                // アニメーション完了を通知
+            });
+
+            // イベントリスナーの解除例
+            /*
+            const myHandler = (data) => {
+                console.log('ドラッグ中');
+            };
+            carousel.on('dragEnd', myHandler);
+            // 後で解除する場合
+            carousel.off('dragEnd', myHandler);
+            // または特定のイベントのすべてのハンドラを解除
+            carousel.off('dragEnd');
+            */
+
+            /**************************************
+             * 6. レイアウト操作メソッド
+             **************************************/
+            // ウィンドウリサイズ時にレイアウトを再計算
+            window.addEventListener('resize', () => {
+                carousel.recalculateLayout();
+            });
+
+            // レイアウト再計算イベントをリッスン
+            carousel.on('layoutRecalculated', (data) => {
+                // console.log('コンテナサイズ:', data.containerWidth, data.containerHeight);
+                // console.log('スライドサイズ:', data.slideWidths);
+            });
+
+            /*
+            // スライドの内容が変更された場合にカルーセルを更新
+            // carousel.refresh();
+            */
+
+            /**************************************
+             * 7. カルーセル設定メソッド
+             **************************************/
+            // 以下は必要に応じてコメントを外して使用
+            /*
+            // カルーセルのオプションを動的に更新
+            document.getElementById('updateSettingsBtn').addEventListener('click', () => {
+                carousel.update({
+                    duration: 0.8,
+                    gap: 20,
+                    autoplay: false
+                });
+            });
+
+            // カルーセルの有効化・無効化
+            document.getElementById('toggleCarouselBtn').addEventListener('click', () => {
+                if (carousel.isDisabled) {
+                    carousel.enable();  // 有効化
+                } else {
+                    carousel.disable(); // 無効化
+                }
+            });
+            */
+
+            /**************************************
+             * 8. スライド操作メソッド
+             **************************************/
+            // 以下は実際にUIと連携する場合はコメントを外して使用
+            /*
+            // 新しいスライドを追加するボタン
+            document.getElementById('addSlideBtn').addEventListener('click', () => {
+                const newSlide = `<div class="carousel-item">
+                    <img src="https://picsum.photos/600/400?random=${Date.now()}" alt="新しいスライド">
+                    <div class="progress-bar"></div>
+                    <div class="progress-display">進捗率: <span class="progress-value">0</span></div>
+                </div>`;
+                carousel.appendSlide(newSlide);
+            });
+
+            // 先頭にスライドを追加するボタン
+            document.getElementById('prependSlideBtn').addEventListener('click', () => {
+                const newSlideElement = document.createElement('div');
+                newSlideElement.className = 'carousel-item';
+                newSlideElement.innerHTML = `
+                    <img src="https://picsum.photos/600/400?random=${Date.now()}" alt="先頭スライド">
+                    <div class="progress-bar"></div>
+                    <div class="progress-display">進捗率: <span class="progress-value">0</span></div>
+                `;
+                carousel.prependSlide(newSlideElement);
+            });
+
+            // スライドを削除するボタン
+            document.getElementById('removeSlideBtn').addEventListener('click', () => {
+                const indexToRemove = parseInt(document.getElementById('slideIndexInput').value) || 0;
+                carousel.removeSlide(indexToRemove);
+            });
+            */
+
+            /**************************************
+             * 9. 情報取得メソッド
+             **************************************/
+            // 以下は必要に応じてコメントを外して使用
+            /*
+            // 現在のアクティブインデックスとスライド数を表示
+            function updateCarouselInfo() {
+                const activeIndex = carousel.getActiveIndex();
+                const slidesCount = carousel.getSlidesCount();
+                document.getElementById('carouselInfo').textContent = 
+                    `現在のスライド: ${activeIndex + 1}/${slidesCount}`;
+            }
+            
+            // スライド変更後にカルーセル情報を更新
+            carousel.on('afterSlideChange', updateCarouselInfo);
+            
+            // 初期情報表示
+            updateCarouselInfo();
+            */
+
+            /**************************************
+             * 10. 破棄メソッド（ページ遷移前などに使用）
+             **************************************/
+            /*
+            // カルーセルを破棄する関数
+            function cleanupCarousel() {
+                carousel.destroy();
+            }
+
+            // ページ離脱時などにクリーンアップ
+            // window.addEventListener('beforeunload', cleanupCarousel);
+            */
+        });
+    </script>
+</body>
+
+</html>
